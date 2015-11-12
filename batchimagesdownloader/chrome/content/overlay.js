@@ -333,11 +333,11 @@ var batchimagesdownloader = {
 			} catch (e) {}
 			//检查本次批量下载是否将要开始重复上次最后一个下载的url地址（一般是时间倒序才可以，未来考虑增加一个时间正序倒序的设置开关，也需要将这个控制重复的代码设置开关）
 			var lastmarkurl = null;
-			try{ lastmarkurl = localStorage.getItem(this.site);}catch(err){consol.log('can\'t get the last image url as a mark.')}
-			if (_this.imgurls[_this.imgurls.length-1] == lastmark || _this.ajaxQueue.length == 0)) {
+			try{ lastmarkurl = localStorage.getItem(this.site);}catch(err){consol.log('can\'t get the last image url as a mark.');}
+			if (_this.imgurls[_this.imgurls.length-1] == lastmark || _this.ajaxQueue.length == 0) {
 				if(_this.debug) {alert("imgurls:"+_this.imgurls);alert("imgNames:"+_this.imgNames);}
 				if(_this.imgurls[_this.imgurls.length-1] == lastmark) _this.imgurls.pop();//开始出现重复，那么删除重复项目，开始下载
-				try{ localStorage.setItem(this.site,_this.imgurls[_this.imgurls.length-1]);}catch(err){consol.log('can\'t save the last image url as a mark.')}//标记本次批量下载最后一个url
+				try{ localStorage.setItem(this.site,_this.imgurls[_this.imgurls.length-1]);}catch(err){consol.log('can\'t save the last image url as a mark.');}//标记本次批量下载最后一个url
 				_this.batchImagesDownloadChained();
 				return;
 			} else _this.execImagesQuery();
