@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<!DOCTYPE dialog SYSTEM "chrome://batchimagesdownloader/locale/batchimagesdownloader.dtd">
+
+<dialog id="optionsDialog" title="&batchimagesdownloader.conf_title;"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    width="500"
+    height="300"
+    buttons="accept,cancel"
+    buttonlabelcancel="&batchimagesdownloader.conf_cancel;"
+    buttonlabelaccept="&batchimagesdownloader.conf_save;"
+    onload="batchimagesdownloaderconf.loadQuickDownPref();"
+    ondialogaccept="batchimagesdownloaderconf.saveOptions(); window.close();"
+    ondialogcancel="window.close();"
+    windowtype="batchimagesdownloader:options"
+>
+
+    <script type="application/x-javascript" src="chrome://batchimagesdownloader/content/option.js"/>
+
+    <dialogheader title="&batchimagesdownloader.conf_header;" description="&batchimagesdownloader.conf_desc;"/>
+
+    <groupbox>
+    	<caption label="&batchimagesdownloader.set_path;"/>
+            <hbox>
+              <textbox id="textbox_path" flex="1" readonly="true"/>
+              <button id="choosePath" label="&batchimagesdownloader.browse;" oncommand="batchimagesdownloaderconf.pickPath()" width="90"/>
+            </hbox>
+   </groupbox>
+   <groupbox>
+    	<caption label="&batchimagesdownloader.multiple;"/>
+            <hbox>
+	            <checkbox label="&batchimagesdownloader.autorename;" checked="false" id="auto-rename" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>
+	            <checkbox label="&batchimagesdownloader.autoskip;" checked="true" id="auto-skip" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>
+	        </hbox>
+   </groupbox>
+   <groupbox>
+    	<caption label="&batchimagesdownloader.dirstructure;"/>
+            <hbox>
+	            <checkbox label="&batchimagesdownloader.ds_custom;" checked="false" id="ds_custom" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>
+	            <checkbox label="&batchimagesdownloader.ds_host;" checked="false" id="ds_host" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>
+	            <checkbox label="&batchimagesdownloader.ds_title;" checked="false" id="ds_title" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>
+	            <checkbox label="&batchimagesdownloader.ds_date;" checked="false" id="ds_date" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>
+	            (<checkbox label="&batchimagesdownloader.ds_time;" checked="false" id="ds_time" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>)
+	            
+	        </hbox>
+   </groupbox>
+</dialog>

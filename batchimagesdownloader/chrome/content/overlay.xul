@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://batchimagesdownloader/locale/batchimagesdownloader.dtd">
+<overlay id="batchimagesdownloader-Overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script type="application/x-javascript" src="overlay.js"/>
+	<toolbarpalette id="BrowserToolbarPalette">
+	  <toolbarbutton id="BID_mnuToolbar0" label="&batchimagesdownloader.toolbar_mnu;" type="menu"
+	                 class="toolbarbutton-1 chromeclass-toolbar-additional"
+	                 image="chrome://batchimagesdownloader/content/icon.png"
+	                 oncommand="">                                  
+			<menupopup id="BID_menu" onpopupshowing="event.stopPropagation();if (event.target == this) {}">
+				<menuitem id="BID_toolbar_start" image="chrome://batchimagesdownloader/content/start.png" label="&batchimagesdownloader.toolbar_start;" oncommand="batchimagesdownloader.onClk(event,1); event.stopPropagation();"/>
+				<menuitem id="BID_toolbar_abort" image="chrome://batchimagesdownloader/content/quit.png" label="&batchimagesdownloader.toolbar_abort;" oncommand="batchimagesdownloader.onClk(event,2); event.stopPropagation();"/>
+				<menuitem id="BID_toolbar_config" image="chrome://batchimagesdownloader/content/config.png" label="&batchimagesdownloader.toolbar_config;" oncommand="batchimagesdownloader.onClk(event,3); event.stopPropagation();"/>
+				<menuitem id="BID_toolbar_reload" image="chrome://batchimagesdownloader/content/reload.png" label="&batchimagesdownloader.toolbar_reload;" oncommand="batchimagesdownloader.onClk(event,4); event.stopPropagation();"/>
+				<menuitem id="BID_toolbar_edit" image="chrome://batchimagesdownloader/content/edit.png" label="&batchimagesdownloader.toolbar_edit;" oncommand="batchimagesdownloader.onClk(event,5); event.stopPropagation();"/>
+			</menupopup>
+		</toolbarbutton>
+	</toolbarpalette>
+	<statusbar id="urlbar-icons">
+		<statusbarpanel id="batchimagesdownloader-panel" class="statusbarpanel-menu-iconic">
+            <progressmeter id="batchdown_prog" mode="determined" hidden="true"/>
+        </statusbarpanel>
+    </statusbar>
+</overlay>

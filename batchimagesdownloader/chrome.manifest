@@ -1,0 +1,4 @@
+content	batchimagesdownloader	chrome/content/
+overlay	chrome://browser/content/browser.xul chrome://batchimagesdownloader/content/overlay.xul
+locale batchimagesdownloader zh-CN chrome/locale/zh-CN/
+
