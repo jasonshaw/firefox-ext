@@ -335,7 +335,8 @@ var batchimagesdownloader = {
 			//var lastmarkurl = null;
 			//try{ lastmarkurl = localStorage.getItem(this.site);}catch(err){console.log('can\'t get the last image url as a mark.');}
 			//if (_this.imgurls[_this.imgurls.length-1] == lastmarkurl || _this.ajaxQueue.length == 0) {
-			//	if(_this.debug) {alert("imgurls:"+_this.imgurls);alert("imgNames:"+_this.imgNames);}
+			if (_this.ajaxQueue.length == 0) {
+				if(_this.debug) {alert("imgurls:"+_this.imgurls);alert("imgNames:"+_this.imgNames);}
 			//	if(_this.imgurls[_this.imgurls.length-1] == lastmarkurl) _this.imgurls.pop();//开始出现重复，那么删除重复项目，开始下载
 			//	try{ localStorage.setItem(this.site,_this.imgurls[_this.imgurls.length-1]);}catch(err){console.log('can\'t save the last image url as a mark.');}//标记本次批量下载最后一个url
 				_this.batchImagesDownloadChained();
