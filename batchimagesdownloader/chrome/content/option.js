@@ -58,7 +58,7 @@ var batchimagesdownloaderconf = {
 		    .getService(Components.interfaces.nsIPrefService).getBranch("batchimagesdownloader.");
 	    this.quickdown_pref.setCharPref("path", encodeURI(document.getElementById("textbox_path").getAttribute("value")));// fixed chinese dir messy codes
 	    this.quickdown_pref.setCharPref("autorename", document.getElementById('auto-rename').getAttribute('checked'));
-	    var keys = ['ds_host','ds_title','ds_date','ds_time','ds_custom'],i=0;
+	    var keys = ['ds_host','ds_title','ds_date','ds_time','ds_custom','dupmark'],i=0;
 	    while(keys[i]){
 		    this.quickdown_pref.setCharPref(keys[i], document.getElementById(keys[i++]).getAttribute('checked'));
 	    }

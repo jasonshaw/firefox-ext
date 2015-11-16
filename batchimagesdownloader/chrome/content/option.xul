@@ -31,6 +31,7 @@
             <hbox>
 	            <checkbox label="&batchimagesdownloader.autorename;" checked="false" id="auto-rename" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>
 	            <checkbox label="&batchimagesdownloader.autoskip;" checked="true" id="auto-skip" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>
+	            <checkbox label="&batchimagesdownloader.dupmark;" checked="true" id="dupmark" oncommand="batchimagesdownloaderconf.onCheckbox(this);"/>
 	        </hbox>
    </groupbox>
    <groupbox>
