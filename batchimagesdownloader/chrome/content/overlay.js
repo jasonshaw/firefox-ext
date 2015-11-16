@@ -1,5 +1,6 @@
 var batchimagesdownloader = {
 	debug: false,
+	dupcheck:true,
 	save2fileorNot:false,
 	appendfld:'',
 	pageUrls: [],
@@ -42,6 +43,7 @@ var batchimagesdownloader = {
 					//if(this.sites[this.site].debug != undefined) this.debug = true;
 					this.debug = this.sites[this.site].debug || false;
 					this.save2fileorNot = this.sites[this.site].save2file || false;
+					this.dupcheck = this.sites[this.site].dupcheck || true;
 					//test
 					//if(this.sites[this.site].getImgNameRule != undefined) this.getImgNameRule = this.sites[this.site].getImgNameRule;
 					if (this.sites[this.site].main == undefined) {
@@ -152,7 +154,36 @@ var batchimagesdownloader = {
 		} catch(e){}
 		this.pageUrls = this.imgurls = this.subAlbumUrls = this.ajaxQueue = this.imgNames = [];
 		this.total = this.existImgNum = this.delay = this.delayCnt = 0;
-		this.site = null;this.debug = false;this.save2fileorNot = false;
+		this.site = null;this.debug = false;this.save2fileorNot = false;this.dupcheck = true;
+	},
+	duplicatecheck: function(){
+		if(!this.dupcheck) return;
+		//检查本次批量下载是否将要开始重复上次最后一个下载的url地址（一般是时间倒序才可以，未来考虑增加一个时间正序倒序的设置开关，也需要将这个控制重复的代码设置开关）
+		var lastmarkstart = this.getPref(this.site+'_start')||null;
+		var lastmarkend = this.getPref(this.site+'_end')||null;
+		//try{ lastmarkstart = localStorage[this.site+'_start'];lastmarkend = localStorage[this.site+'_end'];}
+		//catch(err){console.log('can\'t get the last image start and end url as a mark.');}
+		if(this.debug)alert(lastmarkstart+'++'+lastmarkend);
+		var sStart = this.subAlbumUrls.indexOf(lastmarkstart),sEnd = this.subAlbumUrls.indexOf(lastmarkend);
+		if(sStart !==-1 && sEnd !==-1){//上次的头尾都在，那么这次将跳过中间的
+			this.subAlbumUrls.splice(sStart,sEnd-sStart+1);
+		}
+		if(sStart !==-1 && sEnd ===-1){//上次的头在，而尾不在，跳过直到尾部
+			this.subAlbumUrls.splice(sStart,this.subAlbumUrls.length-sStart);
+		}
+		if(sStart ===-1 && sEnd !==-1){//上次的头不在，而尾在，跳过直到头部
+			this.subAlbumUrls.splice(0,sEnd+1);
+		}
+		//if(this.debug)alert(this.subAlbumUrls);
+	},
+	markUrls:function(){
+		//getPref
+			this.setPref(this.site+'_start',this.subAlbumUrls[0]);
+			this.setPref(this.site+'_end',this.subAlbumUrls[this.subAlbumUrls.length-1]);
+			//try{ localStorage[this.site+'_end']=this.subAlbumUrls[0];localStorage[this.site+'_end']=this.subAlbumUrls[this.subAlbumUrls.length-1];}
+			//catch(err){console.log('can\'t save the last image start and end url as a mark.');}
+			//alert(this.subAlbumUrls[0]+'++'+localStorage[this.site+'_end']);
+			alert(this.getPref(this.site+'_start')+'++'+this.getPref(this.site+'_end'));
 	},
 	edit: function() {
 		let aFile = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIDirectoryService).QueryInterface(Ci.nsIProperties).get('UChrm', Ci.nsILocalFile);
@@ -309,8 +340,18 @@ var batchimagesdownloader = {
 		}
 	},
 	imagesUrlsQuery: function() {
-		this.ajaxQueue = this.subAlbumUrls;
-		this.execImagesQuery();
+		//检查本次批量下载是否将要开始重复上次最后一个下载的url地址（一般是时间倒序才可以，未来考虑增加一个时间正序倒序的设置开关，也需要将这个控制重复的代码设置开关）
+		this.duplicatecheck();
+		//记录当前实际下载的首尾subAlbumUrls地址备用
+		if(this.subAlbumUrls.length>0){
+			this.markUrls();
+			this.ajaxQueue = this.subAlbumUrls;
+			this.execImagesQuery();
+		} else {
+			this.reset();
+			this.alert("no subAlbumUrls should be queried at this time, batchimagesdownloader stopped!");
+			return;
+		}
 	},
 	execImagesQuery: function() {
 		if (this.getStatus() == "idle") return;
@@ -331,14 +372,8 @@ var batchimagesdownloader = {
 					_this.imgNames = _this.imgNames.concat(attVs);
 				}
 			} catch (e) {}
-			////检查本次批量下载是否将要开始重复上次最后一个下载的url地址（一般是时间倒序才可以，未来考虑增加一个时间正序倒序的设置开关，也需要将这个控制重复的代码设置开关）
-			//var lastmarkurl = null;
-			//try{ lastmarkurl = localStorage.getItem(this.site);}catch(err){console.log('can\'t get the last image url as a mark.');}
-			//if (_this.imgurls[_this.imgurls.length-1] == lastmarkurl || _this.ajaxQueue.length == 0) {
 			if (_this.ajaxQueue.length == 0) {
 				if(_this.debug) {alert("imgurls:"+_this.imgurls);alert("imgNames:"+_this.imgNames);}
-			//	if(_this.imgurls[_this.imgurls.length-1] == lastmarkurl) _this.imgurls.pop();//开始出现重复，那么删除重复项目，开始下载
-			//	try{ localStorage.setItem(this.site,_this.imgurls[_this.imgurls.length-1]);}catch(err){console.log('can\'t save the last image url as a mark.');}//标记本次批量下载最后一个url
 				_this.batchImagesDownloadChained();
 				return;
 			} else _this.execImagesQuery();
@@ -522,6 +557,10 @@ var batchimagesdownloader = {
 			value = decodeURI(quickdown_pref.getCharPref(name));
 		} catch (e) {value = null;};
 		return value;
+	},
+	setPref: function(name,value) {
+		this.quickdown_pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("batchimagesdownloader.");
+		this.quickdown_pref.setCharPref(name, value);
 	},
 	getDefaultSaveDirectory: function(fld) {
 		var pref_path = this.getPref("path");
